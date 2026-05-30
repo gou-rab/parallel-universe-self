@@ -102,7 +102,16 @@ def logout():
     return redirect(url_for("login"))
 
 
-# ── Admin: View All Users ──
+# ── Admin: Dashboard Page ──
+@app.route("/admin")
+def admin_dashboard():
+    admin_key = request.args.get("key", "")
+    if admin_key != os.environ.get("ADMIN_KEY", "admin123"):
+        return render_template("login.html", mode="login"), 403
+    return render_template("admin.html", admin_key_hint=f"Key: {admin_key[:3]}***")
+
+
+# ── Admin: API — All Users (JSON) ──
 @app.route("/admin/users")
 def admin_users():
     admin_key = request.args.get("key", "")

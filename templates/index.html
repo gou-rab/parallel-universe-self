@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parallel Universe Self — Who Are You in Other Dimensions?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Raleway:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+
+  <!-- Stars Background -->
+  <div class="stars" id="stars"></div>
+  <div class="nebula n1"></div>
+  <div class="nebula n2"></div>
+  <div class="nebula n3"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="portal-ring">
+      <div class="pr-outer"></div>
+      <div class="pr-inner"></div>
+      <div class="pr-core">∞</div>
+    </div>
+    <h1 class="logo-text">PARALLEL UNIVERSE SELF</h1>
+    <p class="tagline">Discover who you are across 5 dimensions of existence</p>
+    <p class="tagline-bn">৫টি মহাবিশ্বে আপনার অস্তিত্ব আবিষ্কার করুন</p>
+  </header>
+
+  <main class="main">
+
+    <!-- INPUT SECTION -->
+    <section class="input-section" id="inputSection">
+      <div class="input-card">
+
+        <div class="ic-header">
+          <span class="ic-icon">◈</span>
+          <h2 class="ic-title">Describe Your Life</h2>
+          <p class="ic-sub">The Oracle needs to know you to reveal your other selves</p>
+        </div>
+
+        <!-- Language Toggle -->
+        <div class="lang-row">
+          <button class="btn-lang active" id="btnEN" onclick="setLang('en')">🇬🇧 English</button>
+          <button class="btn-lang" id="btnBN" onclick="setLang('bn')">🇧🇩 বাংলা</button>
+        </div>
+
+        <!-- Quick Fill Fields -->
+        <div class="quick-fields">
+          <input class="qf-input" id="qfName"        type="text"    placeholder="Your name"/>
+          <input class="qf-input" id="qfAge"         type="number"  placeholder="Age" min="10" max="100"/>
+          <input class="qf-input" id="qfJob"         type="text"    placeholder="Your job / study"/>
+          <input class="qf-input" id="qfCity"        type="text"    placeholder="Your city"/>
+          <input class="qf-input" id="qfDream"       type="text"    placeholder="Your biggest dream"/>
+          <input class="qf-input" id="qfFear"        type="text"    placeholder="Your biggest fear"/>
+        </div>
+
+        <div class="or-divider"><span>or write freely</span></div>
+
+        <textarea
+          class="life-input"
+          id="lifeInput"
+          placeholder="Describe your life in your own words... your personality, struggles, dreams, relationships, what makes you unique, what you wish was different..."
+          rows="5"
+          maxlength="1000"
+        ></textarea>
+        <div class="char-count"><span id="charCount">0</span> / 1000</div>
+
+        <button class="btn-generate" id="btnGenerate">
+          <span class="bg-icon">⟁</span>
+          <span id="btnText">Open the Portal</span>
+          <span class="bg-shine"></span>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- STATUS -->
+    <div class="status-bar" id="statusBar" style="display:none;" role="status" aria-live="polite">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">Consulting the Oracle...</span>
+    </div>
+
+    <!-- UNIVERSE CARDS -->
+    <section class="universes-section" id="universesSection" style="display:none;">
+
+      <div class="us-header">
+        <h2 class="us-title">Your <span class="highlight">5 Parallel Lives</span></h2>
+        <p class="us-sub" id="usSub">The Oracle has spoken. Across the multiverse, you exist as...</p>
+        <button class="btn-reset" id="btnReset" onclick="resetApp()">↩ Try Again</button>
+      </div>
+
+      <div class="universe-grid" id="universeGrid">
+        <!-- Cards injected by JS -->
+      </div>
+
+      <!-- Share Section -->
+      <div class="share-section">
+        <h3 class="share-title">✨ Share Your Parallel Lives</h3>
+        <button class="btn-share" onclick="shareResults()">🔗 Copy Share Text</button>
+        <p class="share-note" id="shareNote"></p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    Parallel Universe Self · Powered by Groq AI · The Multiverse Awaits 🌌
+  </footer>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay" aria-hidden="true">
+    <div class="loading-portal">
+      <div class="lp-ring r1"></div>
+      <div class="lp-ring r2"></div>
+      <div class="lp-ring r3"></div>
+      <div class="lp-core">∞</div>
+    </div>
+    <p class="loading-title">OPENING THE PORTAL</p>
+    <p class="loading-sub" id="loadingSub">Scanning parallel dimensions...</p>
+    <div class="loading-steps" id="loadingSteps">
+      <div class="ls-step active" id="ls1">⟁ Analyzing your quantum signature...</div>
+      <div class="ls-step" id="ls2">🌌 Scanning 5 dimensions...</div>
+      <div class="ls-step" id="ls3">✨ Crystallizing your alternate selves...</div>
+      <div class="ls-step" id="ls4">🔮 The Oracle is speaking...</div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

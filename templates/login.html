@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parallel Universe Self — Enter the Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Raleway:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  <style>
+    .auth-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 440px;
+      background: linear-gradient(135deg, rgba(10,0,21,0.97), rgba(15,0,35,0.97));
+      border: 1px solid rgba(147,51,234,0.35);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 0 80px rgba(147,51,234,0.12), inset 0 0 40px rgba(0,0,0,0.3);
+      backdrop-filter: blur(20px);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .auth-portal {
+      position: relative;
+      width: 80px; height: 80px;
+      margin: 0 auto 1rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .ap-ring {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      background: conic-gradient(from 0deg, #7c3aed, #db2777, #0891b2, #7c3aed) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      animation: spin 5s linear infinite;
+    }
+
+    .ap-core {
+      font-size: 2rem;
+      color: #9333ea;
+      filter: drop-shadow(0 0 12px #9333ea);
+      animation: corePulse 2s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    .auth-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.35rem;
+    }
+
+    .auth-sub {
+      font-size: 0.82rem;
+      color: #5a3a8a;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.04em;
+    }
+
+    /* Tabs */
+    .auth-tabs {
+      display: flex;
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 1.75rem;
+      border: 1px solid rgba(147,51,234,0.15);
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 0.6rem;
+      border: none;
+      background: transparent;
+      color: #5a3a8a;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .auth-tab.active {
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      color: white;
+      box-shadow: 0 2px 12px rgba(124,58,237,0.3);
+    }
+
+    /* Form */
+    .auth-form { display: flex; flex-direction: column; gap: 1rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .form-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: #5a3a8a;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .form-input {
+      padding: 0.8rem 1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(147,51,234,0.2);
+      border-radius: 8px;
+      color: #f0e8ff;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-input::placeholder { color: #3a2060; }
+    .form-input:focus {
+      border-color: rgba(147,51,234,0.6);
+      box-shadow: 0 0 16px rgba(147,51,234,0.12);
+    }
+
+    .btn-auth {
+      position: relative;
+      padding: 0.95rem;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 24px rgba(124,58,237,0.35);
+      margin-top: 0.5rem;
+    }
+
+    .btn-auth:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 32px rgba(124,58,237,0.45);
+    }
+
+    .btn-auth:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-auth-shine {
+      position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+      transform: translateX(-100%);
+      animation: shine 3s ease-in-out infinite;
+    }
+
+    .auth-error {
+      padding: 0.7rem 1rem;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 6px;
+      color: #fca5a5;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      display: none;
+    }
+
+    .auth-success {
+      padding: 0.7rem 1rem;
+      background: rgba(74,222,128,0.1);
+      border: 1px solid rgba(74,222,128,0.3);
+      border-radius: 6px;
+      color: #86efac;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      display: none;
+      text-align: center;
+    }
+
+    .auth-divider {
+      text-align: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: #3a2060;
+      margin: 0.5rem 0;
+    }
+
+    .auth-footer-text {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      color: #3a2060;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars" id="stars"></div>
+  <div class="nebula n1"></div>
+  <div class="nebula n2"></div>
+  <div class="nebula n3"></div>
+
+  <div class="auth-wrap">
+    <div class="auth-card">
+
+      <!-- Header -->
+      <div class="auth-header">
+        <div class="auth-portal">
+          <div class="ap-ring"></div>
+          <span class="ap-core">∞</span>
+        </div>
+        <h1 class="auth-title">ENTER THE PORTAL</h1>
+        <p class="auth-sub">Your journey across dimensions begins here</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin"  onclick="switchTab('login')">LOGIN</button>
+        <button class="auth-tab"        id="tabSignup" onclick="switchTab('signup')">SIGN UP</button>
+      </div>
+
+      <!-- Error / Success -->
+      <div class="auth-error"   id="authError"></div>
+      <div class="auth-success" id="authSuccess"></div>
+
+      <!-- LOGIN FORM -->
+      <form class="auth-form" id="loginForm" onsubmit="return false;">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" id="loginEmail" type="email" placeholder="your@email.com" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" id="loginPwd" type="password" placeholder="••••••••" required/>
+        </div>
+        <button class="btn-auth" id="btnLogin" onclick="doLogin()">
+          <span>OPEN THE PORTAL</span>
+          <div class="btn-auth-shine"></div>
+        </button>
+      </form>
+
+      <!-- SIGNUP FORM -->
+      <form class="auth-form" id="signupForm" style="display:none;" onsubmit="return false;">
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input class="form-input" id="signupName" type="text" placeholder="Enter your name" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" id="signupEmail" type="email" placeholder="your@email.com" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password (min 6 chars)</label>
+          <input class="form-input" id="signupPwd" type="password" placeholder="••••••••" required/>
+        </div>
+        <button class="btn-auth" id="btnSignup" onclick="doSignup()">
+          <span>BEGIN MY JOURNEY</span>
+          <div class="btn-auth-shine"></div>
+        </button>
+      </form>
+
+      <p class="auth-footer-text">
+        🌌 Parallel Universe Self · Powered by Groq AI
+      </p>
+
+    </div>
+  </div>
+
+  <script>
+    // Stars
+    const container = document.getElementById("stars");
+    for (let i = 0; i < 150; i++) {
+      const s = document.createElement("div");
+      s.className = "star";
+      const sz = Math.random() * 2.5 + 0.5;
+      s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--dur:${Math.random()*4+2}s;--delay:${Math.random()*5}s;opacity:${Math.random()*0.7+0.1}`;
+      container.appendChild(s);
+    }
+
+    // Tab switch
+    function switchTab(tab) {
+      document.getElementById("loginForm").style.display  = tab === "login"  ? "flex" : "none";
+      document.getElementById("signupForm").style.display = tab === "signup" ? "flex" : "none";
+      document.getElementById("tabLogin").classList.toggle("active",  tab === "login");
+      document.getElementById("tabSignup").classList.toggle("active", tab === "signup");
+      clearMessages();
+    }
+
+    function showError(msg) {
+      const el = document.getElementById("authError");
+      el.textContent = "⚠ " + msg;
+      el.style.display = "block";
+      document.getElementById("authSuccess").style.display = "none";
+    }
+
+    function showSuccess(msg) {
+      const el = document.getElementById("authSuccess");
+      el.textContent = "✅ " + msg;
+      el.style.display = "block";
+      document.getElementById("authError").style.display = "none";
+    }
+
+    function clearMessages() {
+      document.getElementById("authError").style.display   = "none";
+      document.getElementById("authSuccess").style.display = "none";
+    }
+
+    async function doLogin() {
+      const email = document.getElementById("loginEmail").value.trim();
+      const pwd   = document.getElementById("loginPwd").value;
+      const btn   = document.getElementById("btnLogin");
+
+      if (!email || !pwd) { showError("Please fill in all fields."); return; }
+
+      btn.disabled = true;
+      btn.querySelector("span").textContent = "OPENING PORTAL...";
+      clearMessages();
+
+      try {
+        const res  = await fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password: pwd })
+        });
+        const data = await res.json();
+
+        if (!res.ok) { showError(data.error); return; }
+
+        showSuccess(`Welcome back, ${data.name}! Entering the multiverse...`);
+        setTimeout(() => { window.location.href = "/"; }, 1200);
+
+      } catch (e) {
+        showError("Connection failed. Please try again.");
+      } finally {
+        btn.disabled = false;
+        btn.querySelector("span").textContent = "OPEN THE PORTAL";
+      }
+    }
+
+    async function doSignup() {
+      const name  = document.getElementById("signupName").value.trim();
+      const email = document.getElementById("signupEmail").value.trim();
+      const pwd   = document.getElementById("signupPwd").value;
+      const btn   = document.getElementById("btnSignup");
+
+      if (!name || !email || !pwd) { showError("Please fill in all fields."); return; }
+
+      btn.disabled = true;
+      btn.querySelector("span").textContent = "CREATING YOUR PORTAL...";
+      clearMessages();
+
+      try {
+        const res  = await fetch("/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password: pwd })
+        });
+        const data = await res.json();
+
+        if (!res.ok) { showError(data.error); return; }
+
+        showSuccess(`Welcome, ${data.name}! Your portal is ready. Entering...`);
+        setTimeout(() => { window.location.href = "/"; }, 1500);
+
+      } catch (e) {
+        showError("Connection failed. Please try again.");
+      } finally {
+        btn.disabled = false;
+        btn.querySelector("span").textContent = "BEGIN MY JOURNEY";
+      }
+    }
+
+    // Enter key support
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const loginVisible = document.getElementById("loginForm").style.display !== "none";
+        if (loginVisible) doLogin(); else doSignup();
+      }
+    });
+  </script>
+</body>
+</html>
